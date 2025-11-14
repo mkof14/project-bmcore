@@ -1,0 +1,7 @@
+import Stripe from 'stripe';
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { getUserFromRequest } from '../lib/auth';
+import { ensureUser } from '../lib/db';
+const stripe = new Stripe(process.env.STRIPE_SECRET!, { apiVersion: '2024-06-20' });
+const PRICE_MAP: Record<string, string | undefined> = {'core:monthly':process.env.PRICE_CORE_MONTHLY,'core:yearly':process.env.PRICE_CORE_YEARLY,'daily:monthly':process.env.PRICE_DAILY_MONTHLY,'daily:yearly':process.env.PRICE_DAILY_YEARLY,'max:monthly':process.env.PRICE_MAX_MONTHLY,'max:yearly':process.env.PRICE_MAX_YEARLY};
+export default async function handler(req: NextApiRequest, res: NextApiResponse){ if(req.method!=='POST')return res.status(405).end(); const user=await getUserFromRequest(req); if(!user)return res.status(401).json({error:'unauthorized'}); const body=typeof req.body==='object'?req.body:JSON.parse(String(req.body||'{}')); const key=`${body.plan}:${body.period}`; const price=PRICE_MAP[key]; if(!price)return res.status(400).json({error:'price_not_configured'}); await ensureUser(user.id,user.email); const session=await stripe.checkout.sessions.create({mode:'subscription',client_reference_id:user.id,customer_email:user.email,line_items:[{price,quantity:1}],success_url:`${process.env.APP_BASE_URL}/billing/success`,cancel_url:`${process.env.APP_BASE_URL}/billing/cancel`,allow_promotion_codes:true}); res.json({url:session.url}); }
