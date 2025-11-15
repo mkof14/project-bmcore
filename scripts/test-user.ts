@@ -1,5 +1,5 @@
-import { prisma } from "../src/lib/prisma"
-import { upsertUserFromClerk } from "../src/lib/users"
+import { prisma } from "../src/lib/prisma.ts"
+import { upsertUserFromClerk } from "../src/lib/users.ts"
 
 async function main() {
   const user = await upsertUserFromClerk({
