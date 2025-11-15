@@ -132,7 +132,6 @@ export default function AllAPIKeysManager() {
             }`}
           >
             <div className="flex items-center justify-between">
-              <span className="font-medium">All Services</span>
               <span className="text-xs px-2 py-0.5 rounded-full bg-gray-700">
                 {rows.length}
               </span>

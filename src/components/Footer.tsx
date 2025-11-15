@@ -115,8 +115,6 @@ export default function Footer({ onNavigate }: FooterProps) {
                 </button>
               </li>
               <li>
-                <button onClick={() => onNavigate('services-catalog')} className="text-sm text-gray-400 hover:text-orange-500 transition-colors">
-                  All Services
                 </button>
               </li>
               <li>

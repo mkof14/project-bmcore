@@ -17,7 +17,6 @@ export default function SiteMapManager() {
     { id: 'home', name: 'Home', path: '/', icon: Home, enabled: true, category: 'main', description: 'Main page' },
     { id: 'about', name: 'About', path: '/about', icon: FileText, enabled: true, category: 'main', description: 'About us' },
     { id: 'services', name: 'Services', path: '/services', icon: Building2, enabled: true, category: 'main', description: 'Services' },
-    { id: 'catalog', name: 'Services Catalog', path: '/services-catalog', icon: Building2, enabled: true, category: 'main', description: 'Services catalog' },
     { id: 'pricing', name: 'Pricing', path: '/pricing', icon: DollarSign, enabled: true, category: 'main', description: 'Pricing' },
     { id: 'devices', name: 'Devices', path: '/devices', icon: Stethoscope, enabled: true, category: 'main', description: 'Devices' },
     { id: 'science', name: 'Science', path: '/science', icon: FlaskConical, enabled: true, category: 'main', description: 'Scientific research' },

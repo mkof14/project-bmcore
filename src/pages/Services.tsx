@@ -10,7 +10,6 @@ export default function Services({ onNavigate }: ServicesProps) {
       <div className="mx-auto max-w-6xl px-4 pt-20 pb-16">
         <div className="mb-10">
           <h1 className="text-3xl font-semibold tracking-tight text-white md:text-4xl">
-            All Services
           </h1>
           <p className="mt-2 max-w-2xl text-sm text-slate-300 md:text-base">
             Full catalog of BioMath Core service categories and modules.

@@ -252,7 +252,6 @@ export default function HealthCategories({ onNavigate }: HealthCategoriesProps) 
             return (
               <button
                 key={category.id}
-                onClick={() => onNavigate('services-catalog', category.id)}
                 className={`group relative overflow-hidden rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:${category.shadowColor || 'shadow-white/50'}`}
                 style={{ aspectRatio: '1' }}
               >
@@ -285,7 +284,6 @@ export default function HealthCategories({ onNavigate }: HealthCategoriesProps) 
 
         <div className="mt-10 text-center">
           <button
-            onClick={() => onNavigate('services-catalog')}
             className={`inline-flex items-center space-x-2 px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 ${
               isDark
                 ? 'bg-gray-800/30 hover:bg-gray-800/60 border border-gray-700/30 hover:border-gray-600/50 text-orange-500 hover:text-orange-400'

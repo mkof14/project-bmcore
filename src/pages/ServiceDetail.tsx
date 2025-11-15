@@ -120,7 +120,6 @@ export default function ServiceDetail({ onNavigate, serviceId }: ServiceDetailPr
         <div className="text-center">
           <p className="text-gray-600 dark:text-gray-400 mb-4">Service not found</p>
           <button
-            onClick={() => onNavigate('services-catalog')}
             className="text-blue-600 dark:text-blue-400 hover:underline"
           >
             Back to Services
@@ -197,7 +196,6 @@ export default function ServiceDetail({ onNavigate, serviceId }: ServiceDetailPr
         </div>
         <div className="max-w-4xl mx-auto relative z-10">
           <button
-            onClick={() => onNavigate('services-catalog', categoryId)}
             className="flex items-center space-x-2 text-orange-500 hover:text-orange-400 mb-6 transition-colors"
           >
             <ChevronLeft className="h-5 w-5" />
