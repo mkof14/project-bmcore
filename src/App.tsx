@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import FloatingAdvisorButton from "./components/FloatingAdvisorButton";
 import Home from "./pages/Home";
 import Services from "./pages/Services";
 import Pricing from "./pages/Pricing";
@@ -40,6 +41,7 @@ export default function App() {
     <div className="flex min-h-screen flex-col bg-slate-950 text-white">
       <Header onNavigate={setPage} currentPage={page} />
       <main className="flex-1">{renderPage()}</main>
+      <FloatingAdvisorButton onNavigate={setPage} />
       <Footer onNavigate={setPage} />
     </div>
   );
