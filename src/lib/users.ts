@@ -1,4 +1,4 @@
-import { prisma } from "./prisma"
+import { prisma } from "./prisma.ts"
 
 type ClerkUserInput = {
   id: string
@@ -8,18 +8,16 @@ type ClerkUserInput = {
 }
 
 export async function upsertUserFromClerk(input: ClerkUserInput) {
-  const { id, email, fullName, imageUrl } = input
+  const { id, email, imageUrl } = input
   return prisma.user.upsert({
     where: { clerkId: id },
     update: {
       email: email ?? undefined,
-      fullName: fullName ?? undefined,
       imageUrl: imageUrl ?? undefined
     },
     create: {
       clerkId: id,
       email: email ?? null,
-      fullName: fullName ?? null,
       imageUrl: imageUrl ?? null
     }
   })
