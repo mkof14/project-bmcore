@@ -6,7 +6,7 @@ import "./index.css"
 
 const publishableKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
-function Root() {
+const Root = () => {
   if (!publishableKey) {
     return (
       <div className="min-h-screen bg-slate-950 text-white flex items-center justify-center">
