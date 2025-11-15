@@ -8,13 +8,14 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  clerkId   String   @unique
+  id        String    @id @default(cuid())
+  clerkId   String    @unique
   email     String?
-  role      Role     @default(USER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  role      Role      @default(USER)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   reports   Report[]
+  blackbox  BlackBox?
 }
 
 model Report {
@@ -24,6 +25,15 @@ model Report {
   content   String
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id])
+}
+
+model BlackBox {
+  id               String   @id @default(cuid())
+  userId           String   @unique
+  encryptedPayload String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  user             User     @relation(fields: [userId], references: [id])
 }
 
 enum Role {
