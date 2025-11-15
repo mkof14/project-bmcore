@@ -290,7 +290,7 @@ export default function HealthCategories({ onNavigate }: HealthCategoriesProps) 
                 : 'bg-gray-100/30 hover:bg-gray-100/60 border border-gray-300/30 hover:border-gray-300/50 text-orange-600 hover:text-orange-700'
             }`}
           >
-            <span>View All Services</span>
+            <span></span>
             <TrendingUp className="h-5 w-5" />
           </button>
         </div>

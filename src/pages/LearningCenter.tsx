@@ -264,7 +264,7 @@ export default function LearningCenter({ onNavigate }: LearningCenterProps) {
                             <button
                               className="mt-4 text-sm text-orange-600 dark:text-orange-500 hover:underline"
                             >
-                              Browse All Services →
+                              
                             </button>
                           )}
                         </div>
