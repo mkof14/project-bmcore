@@ -1,6 +1,7 @@
 import React from "react"
 import ReactDOM from "react-dom/client"
 import { ClerkProvider } from "@clerk/clerk-react"
+import { ThemeProvider } from "./components/ThemeProvider"
 import App from "./App"
 import "./index.css"
 
@@ -19,7 +20,9 @@ const Root = () => {
 
   return (
     <ClerkProvider publishableKey={publishableKey}>
-      <App />
+      <ThemeProvider>
+        <App />
+      </ThemeProvider>
     </ClerkProvider>
   )
 }
