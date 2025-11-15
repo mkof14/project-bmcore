@@ -1,3 +1,4 @@
+// ----------  Datasource & Generator  ----------
 generator client {
   provider = "prisma-client-js"
 }
@@ -7,10 +8,111 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ----------  ENUMS  ----------
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Plan {
+  CORE
+  DAILY
+  MAX
+}
+
+// ----------  USER (via Clerk) ----------
+model User {
+  id        String   @id @default(cuid())
+  clerkId   String   @unique
+  email     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  role Role @default(USER)
+
+  subscription Subscription?
+  profile      Profile?
+  reports      Report[]
+  blackbox     BlackBox?
+  metrics      MemberMetrics?
+
+  auditLogs AuditLog[]
+}
+
+// ----------  SUBSCRIPTION ----------
+model Subscription {
+  id        String    @id @default(cuid())
+  userId    String    @unique
+  plan      Plan
+  stripeId  String? // Stripe Customer ID
+  status    String    @default("active")
+  startedAt DateTime  @default(now())
+  renewsAt  DateTime?
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+// ----------  PROFILE ----------
+model Profile {
+  id        String    @id @default(cuid())
+  userId    String    @unique
+  fullName  String?
+  birthDate DateTime?
+  height    Int?
+  weight    Int?
+  gender    String?
+  lifestyle String?
+  allergies String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+// ----------  REPORTS ----------
 model Report {
   id        String   @id @default(cuid())
   userId    String
-  filename  String
-  key       String
+  title     String
+  content   String
   createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+// ----------  BLACK BOX (secure private data) ----------
+model BlackBox {
+  id     String @id @default(cuid())
+  userId String @unique
+
+  data      Json // Encrypted JSON
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+// ----------  USER METRICS ----------
+model MemberMetrics {
+  id     String @id @default(cuid())
+  userId String @unique
+
+  calories    Int?
+  steps       Int?
+  sleepHours  Float?
+  waterIntake Int?
+  heartRate   Int?
+  updatedAt   DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+// ----------  AUDIT LOG ----------
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  action    String
+  ip        String?
+  createdAt DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id])
 }
