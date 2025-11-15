@@ -11,28 +11,46 @@ export default async function handler(req, res) {
     const body = await new Promise<any>(resolve => {
       let data = ""
       req.on("data", chunk => (data += chunk))
-      req.on("end", () => resolve(JSON.parse(data || "{}")))
+      req.on("end", () => {
+        try {
+          resolve(JSON.parse(data || "{}"))
+        } catch {
+          resolve({})
+        }
+      })
     })
 
-    const { userId, payload } = body
+    const { userId, clerkId, payload } = body
 
-    if (!userId || typeof payload !== "string") {
+    let dbUserId = userId as string | undefined
+
+    if (!dbUserId && clerkId) {
+      const user = await prisma.user.findUnique({
+        where: { clerkId: clerkId as string }
+      })
+      dbUserId = user ? user.id : undefined
+    }
+
+    if (!dbUserId || typeof payload !== "string") {
       res.statusCode = 400
       res.setHeader("Content-Type", "application/json")
-      res.end(JSON.stringify({ ok: false, error: "invalid_input" }))
+      res.end(JSON.stringify({ ok: false, error: "missing_fields" }))
       return
     }
 
     const box = await prisma.blackBox.upsert({
-      where: { userId },
+      where: { userId: dbUserId },
       update: { encryptedPayload: payload },
-      create: { userId, encryptedPayload: payload }
+      create: {
+        userId: dbUserId,
+        encryptedPayload: payload
+      }
     })
 
     res.statusCode = 200
     res.setHeader("Content-Type", "application/json")
     res.end(JSON.stringify({ ok: true, id: box.id }))
-  } catch (err) {
+  } catch {
     res.statusCode = 500
     res.setHeader("Content-Type", "application/json")
     res.end(JSON.stringify({ ok: false }))

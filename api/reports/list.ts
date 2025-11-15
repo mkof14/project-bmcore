@@ -1,17 +1,31 @@
 import { prisma } from "../../src/lib/prisma.ts"
 
 export default async function handler(req, res) {
-  const userId = req.query.userId
-  if (!userId) {
+  const userId = req.query.userId as string | undefined
+  const clerkId = req.query.clerkId as string | undefined
+
+  let dbUserId = userId
+
+  if (!dbUserId && clerkId) {
+    const user = await prisma.user.findUnique({
+      where: { clerkId }
+    })
+    dbUserId = user ? user.id : undefined
+  }
+
+  if (!dbUserId) {
     res.statusCode = 400
-    return res.end(JSON.stringify({ error: "missing userId" }))
+    res.setHeader("Content-Type", "application/json")
+    res.end(JSON.stringify({ ok: false, error: "missing_user" }))
+    return
   }
 
   const reports = await prisma.report.findMany({
-    where: { userId },
+    where: { userId: dbUserId },
     orderBy: { createdAt: "desc" }
   })
 
   res.setHeader("Content-Type", "application/json")
+  res.statusCode = 200
   res.end(JSON.stringify({ ok: true, reports }))
 }
