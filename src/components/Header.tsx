@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { Menu, X } from "lucide-react"
 import { useUser, SignInButton, UserButton } from "@clerk/clerk-react"
-import { useTheme } from "../contexts/ThemeContext"
 
 type HeaderProps = {
   onNavigate: (page: string, data?: string) => void
@@ -20,7 +19,6 @@ const navItems = [
 
 export default function Header({ onNavigate, currentPage }: HeaderProps) {
   const [open, setOpen] = useState(false)
-  const { theme, toggleTheme } = useTheme()
   const { isSignedIn } = useUser()
 
   const handleNav = (page: string) => {
@@ -56,13 +54,6 @@ export default function Header({ onNavigate, currentPage }: HeaderProps) {
               {item.label}
             </button>
           ))}
-
-          <button
-            onClick={toggleTheme}
-            className="rounded-full border border-slate-700 bg-slate-900/60 px-3 py-1 text-xs font-medium text-slate-200 hover:border-slate-500"
-          >
-            {theme === "dark" ? "Dark" : "Light"}
-          </button>
 
           {isSignedIn ? (
             <div className="flex items-center gap-3">
@@ -120,13 +111,7 @@ export default function Header({ onNavigate, currentPage }: HeaderProps) {
             ))}
           </div>
 
-          <div className="mt-3 flex items-center justify-between">
-            <button
-              onClick={toggleTheme}
-              className="rounded-full border border-slate-700 bg-slate-900/60 px-3 py-1 text-xs font-medium text-slate-200 hover:border-slate-500"
-            >
-              {theme === "dark" ? "Dark" : "Light"}
-            </button>
+          <div className="mt-3 flex items-center justify-end">
             {isSignedIn && (
               <button
                 onClick={() => handleNav("member-zone")}
