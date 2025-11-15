@@ -1,75 +1,42 @@
-import { useEffect, useState, ReactNode } from 'react';
-import { supabase } from '../lib/supabase';
-import LoadingSpinner from './LoadingSpinner';
+import { ReactNode } from "react"
+import { SignedIn, SignedOut, useUser } from "@clerk/clerk-react"
 
-interface AdminGateProps {
-  children: ReactNode;
-  onNavigate?: (page: string) => void;
+type AdminGateProps = {
+  children: ReactNode
 }
 
-export default function AdminGate({ children, onNavigate }: AdminGateProps) {
-  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
+export default function AdminGate({ children }: AdminGateProps) {
+  const { user } = useUser()
 
-  useEffect(() => {
-    checkAdminStatus();
-  }, []);
-
-  const checkAdminStatus = async () => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-
-      if (!user) {
-        setIsAdmin(false);
-        return;
-      }
-
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('is_admin')
-        .eq('id', user.id)
-        .maybeSingle();
-
-      if (error) {
-        console.error('Error checking admin status:', error);
-        setIsAdmin(false);
-        return;
-      }
-
-      setIsAdmin(!!data?.is_admin);
-    } catch (error) {
-      console.error('Error in checkAdminStatus:', error);
-      setIsAdmin(false);
-    }
-  };
-
-  if (isAdmin === null) {
+  if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-        <LoadingSpinner />
-      </div>
-    );
+      <SignedOut>
+        <div className="min-h-[60vh] flex items-center justify-center bg-slate-950 text-white">
+          <div className="max-w-md w-full px-6 py-8 bg-slate-900 rounded-2xl border border-slate-800 shadow-lg text-center">
+            <h1 className="text-2xl font-semibold mb-2">Admin sign in required</h1>
+            <p className="text-slate-400 mb-4">
+              Please sign in with your administrator account to continue.
+            </p>
+          </div>
+        </div>
+      </SignedOut>
+    )
   }
+
+  const isAdmin = user.emailAddresses.some(e => e.emailAddress === "admin@example.com")
 
   if (!isAdmin) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
-        <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-2xl p-8 text-center border border-gray-200 dark:border-gray-700">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-            Access Denied
-          </h2>
-          <p className="text-gray-600 dark:text-gray-300 mb-6">
-            You do not have permission to access this page. Admin privileges are required.
+      <div className="min-h-[60vh] flex items-center justify-center bg-slate-950 text-white">
+        <div className="max-w-md w-full px-6 py-8 bg-slate-900 rounded-2xl border border-slate-800 shadow-lg text-center">
+          <h1 className="text-2xl font-semibold mb-2">Access restricted</h1>
+          <p className="text-slate-400">
+            This section is available only to administrators.
           </p>
-          <button
-            onClick={() => onNavigate ? onNavigate('home') : (window.location.hash = '#/')}
-            className="inline-block px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors"
-          >
-            Go to Home
-          </button>
         </div>
       </div>
-    );
+    )
   }
 
-  return <>{children}</>;
+  return <SignedIn>{children}</SignedIn>
 }
