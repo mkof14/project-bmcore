@@ -2,6 +2,7 @@ import { useState } from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import FloatingAdvisorButton from "./components/FloatingAdvisorButton";
+import FloatingAdvisorButton from "./components/FloatingAdvisorButton";
 import Home from "./pages/Home";
 import Services from "./pages/Services";
 import Pricing from "./pages/Pricing";
@@ -43,6 +44,7 @@ export default function App() {
       <main className="flex-1">{renderPage()}</main>
       <FloatingAdvisorButton onNavigate={setPage} />
       <Footer onNavigate={setPage} />
+      <FloatingAdvisorButton onNavigate={setPage} />
     </div>
   );
 }
