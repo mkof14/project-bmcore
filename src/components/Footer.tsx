@@ -86,11 +86,11 @@ export default function Footer({ onNavigate }: FooterProps) {
 
             <div className="flex items-center space-x-4 mb-4">
               <button
-                onClick={toggleTheme}
-                className="flex items-center space-x-2 px-3 py-2 rounded-md text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white transition-colors"
+
+                className="hidden"
               >
-                {theme === 'light' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
-                <span>{theme === 'light' ? 'Dark' : 'Light'} Mode</span>
+                
+                <span>Dark mode</span>
               </button>
             </div>
 
