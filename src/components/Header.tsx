@@ -10,7 +10,6 @@ type HeaderProps = {
 const navItems = [
   { key: "home", label: "Home" },
   { key: "services", label: "Services" },
-  { key: "services-catalog", label: "All Services" },
   { key: "pricing", label: "Pricing" },
   { key: "investors", label: "Investors" },
   { key: "about", label: "About" },
